@@ -4,7 +4,7 @@
 
 **MUSA AITER** 是面向 Moore Threads MUSA 的开源算子与内核库，服务于大语言模型推理和相关张量计算场景。项目提供稳定的 Python API、基于 PyTorch 的参考实现，以及部分面向 MUSA 的原生内核，覆盖注意力、张量运算、量化、混合专家、模型并行通信和 KV Cache 搬运等能力。
 
-项目以 MUSA 为重点。CPU/reference 路径可用于开发和正确性测试；原生加速路径需要兼容的 PyTorch/TorchMUSA 软件栈和 MUSA 运行时。当前软件包版本为 **0.5.0**。
+项目以 MUSA 为主。CPU/reference 路径可用于开发和正确性测试；原生加速路径需要兼容的 PyTorch/TorchMUSA 软件栈和 MUSA 运行时。当前软件包版本为 **0.5.0**。
 
 ## 项目重点
 
@@ -28,50 +28,7 @@
 
 ## 架构
 
-```mermaid
-flowchart TB
-    subgraph APP["应用和框架集成"]
-        SGLANG["SGLang"]
-        VLLM["vLLM"]
-        CUSTOM["自定义推理服务"]
-    end
-
-    subgraph AITER["MUSA AITER"]
-        API["稳定的 Python API"]
-        REG["能力注册表和后端分派"]
-        REF["PyTorch 参考后端"]
-        NATIVE_EXT["PyTorch/TorchMUSA 扩展边界"]
-        NATIVE_KERNEL["原生 MUSA device kernels"]
-        KV["KV Cache 和 FP8 搬运"]
-        OPS["注意力、GEMM、MoE、量化、MLA、通信"]
-    end
-
-    subgraph PLATFORM["执行平台"]
-        TORCH["PyTorch 和 TorchMUSA"]
-        TOOLCHAIN["MUSA Toolkit 和 mcc"]
-        RUNTIME["MUSA runtime、driver 和设备"]
-    end
-
-    SGLANG --> API
-    VLLM --> API
-    CUSTOM --> API
-    API --> REG
-    API --> KV
-    API --> OPS
-    REG --> REF
-    REG --> NATIVE_EXT
-    REG --> NATIVE_KERNEL
-    KV --> REG
-    OPS --> REG
-    REF --> TORCH
-    NATIVE_EXT --> TORCH
-    NATIVE_EXT --> NATIVE_KERNEL
-    NATIVE_EXT --> RUNTIME
-    NATIVE_KERNEL --> RUNTIME
-    TOOLCHAIN --> NATIVE_EXT
-    TOOLCHAIN --> NATIVE_KERNEL
-    TORCH --> RUNTIME
-```
+![MUSA AITER 架构图](docs/assets/musa-aiter-architecture.png)
 
 公共 API 是项目与上层框架之间的集成边界。能力注册表会为每个算子选择可用实现。参考后端通过 PyTorch 执行。原生路径分为两部分：扩展边界使用 PyTorch/TorchMUSA 的张量、设备和 stream 接口；MUSA device kernels 由 `mcc` 编译，并通过 MUSA runtime/driver 在设备上执行。
 

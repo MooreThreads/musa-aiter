@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test-docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package and test deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[dev]"
+
+      - name: Pytest + coverage summary
+        run: |
+          python -m pytest op_tests -q --cov=musa_aiter --cov-report=term-missing:skip-covered --cov-report=xml
+
+      - name: CLI smoke
+        run: |
+          PYTHONPATH=. python -m musa_aiter.cli.main check --soft
+          PYTHONPATH=. python -m musa_aiter.cli.main list-ops --json | head -c 500
+
+      - name: Regenerate benchmark dashboard (CPU snapshot)
+        run: PYTHONPATH=. python scripts/generate_bench_dashboard.py --iters 5
+
+      - name: CLI benchmark + tune smoke
+        run: |
+          PYTHONPATH=. python -m musa_aiter.cli.main benchmark --op gemm --iters 2 --warmup 1 --json
+          PYTHONPATH=. python -m musa_aiter.cli.main tune --validate --config configs/tuned/example_mp31.csv --json
+
+      - name: Install docs dependencies
+        run: pip install -e ".[docs]"
+
+      - name: MkDocs build
+        run: mkdocs build --strict
+
+      - name: Wheel and sdist build
+        run: python -m build --wheel --sdist
+
+      - name: Verify package artifacts
+        run: python scripts/verify_package_artifacts.py --dist-dir dist

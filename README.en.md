@@ -28,50 +28,7 @@ The project is still evolving. Native coverage, numerical behavior, and performa
 
 ## Architecture
 
-```mermaid
-flowchart TB
-    subgraph APP["Applications and framework integrations"]
-        SGLANG["SGLang"]
-        VLLM["vLLM"]
-        CUSTOM["Custom inference services"]
-    end
-
-    subgraph AITER["MUSA AITER"]
-        API["Stable Python API"]
-        REG["Capability registry and dispatch"]
-        REF["PyTorch reference backends"]
-        NATIVE_EXT["PyTorch/TorchMUSA extension boundary"]
-        NATIVE_KERNEL["Native MUSA device kernels"]
-        KV["KV-cache and FP8 transfer"]
-        OPS["Attention, GEMM, MoE, quantization, MLA, communication"]
-    end
-
-    subgraph PLATFORM["Execution platform"]
-        TORCH["PyTorch and TorchMUSA"]
-        TOOLCHAIN["MUSA Toolkit and mcc"]
-        RUNTIME["MUSA runtime, driver and devices"]
-    end
-
-    SGLANG --> API
-    VLLM --> API
-    CUSTOM --> API
-    API --> REG
-    API --> KV
-    API --> OPS
-    REG --> REF
-    REG --> NATIVE_EXT
-    REG --> NATIVE_KERNEL
-    KV --> REG
-    OPS --> REG
-    REF --> TORCH
-    NATIVE_EXT --> TORCH
-    NATIVE_EXT --> NATIVE_KERNEL
-    NATIVE_EXT --> RUNTIME
-    NATIVE_KERNEL --> RUNTIME
-    TOOLCHAIN --> NATIVE_EXT
-    TOOLCHAIN --> NATIVE_KERNEL
-    TORCH --> RUNTIME
-```
+![MUSA AITER architecture](docs/assets/musa-aiter-architecture.png)
 
 The public API is the integration boundary. The registry selects an available implementation for each operation. Reference backends run through PyTorch. Native paths have two layers: the extension boundary uses PyTorch/TorchMUSA tensor, device, and stream interfaces; MUSA device kernels are compiled with `mcc` and execute through the MUSA runtime/driver.
 

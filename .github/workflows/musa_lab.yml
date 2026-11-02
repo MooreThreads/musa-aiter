@@ -1,0 +1,43 @@
+name: MUSA lab (self-hosted)
+
+# Run manually on a Moore Threads TorchMUSA runner. Register Actions → Runners with
+# labels: self-hosted, linux, musa (edit ``runs-on`` below if your org uses others).
+
+on:
+  workflow_dispatch:
+    inputs:
+      native_smoke:
+        description: Export MUSA_AITER_NATIVE_SMOKE=1 for ctypes add test
+        type: boolean
+        default: false
+
+jobs:
+  musa_lab:
+    runs-on: [self-hosted, linux, musa]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: TorchMUSA + toolkit preflight (strict)
+        run: python3 scripts/validate_native_musa_env.py --strict
+
+      - name: Install dev extras
+        run: |
+          python3 -m pip install --upgrade pip wheel
+          python3 -m pip install -e ".[dev]"
+
+      - name: Full pytest
+        run: python3 -m pytest op_tests -q --tb=short
+
+      - name: pytest -m musa (focused)
+        env:
+          MUSA_AITER_NATIVE_SMOKE: ${{ github.event.inputs.native_smoke == 'true' && '1' || '0' }}
+        run: python3 -m pytest op_tests -q -m musa --tb=short
+
+      - name: Optional native-smoke snippet note
+        if: ${{ github.event.inputs.native_smoke == 'true' }}
+        run: echo "MUSA_AITER_NATIVE_SMOKE=1 set for ctypes add test."
