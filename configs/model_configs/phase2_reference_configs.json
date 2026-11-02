@@ -1,0 +1,30 @@
+{
+  "configs": [
+    {
+      "op": "grouped_gemm",
+      "arch": "mp31",
+      "dtype": "float16",
+      "shape": "tokens=4096,k=512,n=2048,experts=8",
+      "backend": "torch-reference",
+      "kernel": "reference_grouped_gemm",
+      "latency_us": null,
+      "extra": {
+        "status": "placeholder",
+        "note": "Replace with native MUSA benchmark result when TorchMUSA is available."
+      }
+    },
+    {
+      "op": "fused_moe",
+      "arch": "mp31",
+      "dtype": "float16",
+      "shape": "tokens=4096,hidden=512,inter=2048,experts=8,topk=2",
+      "backend": "torch-reference",
+      "kernel": "reference_fused_moe",
+      "latency_us": null,
+      "extra": {
+        "status": "placeholder",
+        "note": "Reference config only."
+      }
+    }
+  ]
+}

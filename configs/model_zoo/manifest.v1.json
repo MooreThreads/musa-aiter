@@ -1,0 +1,29 @@
+{
+  "schema": "musa_aiter.model_zoo.v1",
+  "version": "1.0.0",
+  "revision_date": "2026-05-06",
+  "models": [
+    {
+      "id": "dense_1b_class_example",
+      "family": "dense_llm",
+      "hidden_size": 2048,
+      "num_attention_heads": 16,
+      "num_kv_heads": 16,
+      "head_dim": 128,
+      "intermediate_size": 5632,
+      "max_position_embeddings": 8192,
+      "notes": "Synthetic 1B-class layout for template alignment; not tied to a specific published checkpoint."
+    },
+    {
+      "id": "dense_7b_gqa_example",
+      "family": "dense_llm",
+      "hidden_size": 3584,
+      "num_attention_heads": 28,
+      "num_kv_heads": 4,
+      "head_dim": 128,
+      "intermediate_size": 18944,
+      "max_position_embeddings": 32768,
+      "notes": "Illustrative 7B-class GQA geometry; verify against your serving model card before tuning."
+    }
+  ]
+}

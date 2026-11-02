@@ -1,0 +1,22 @@
+{
+  "schema": "musa_aiter.vendor_matrix.v1",
+  "version": "1.0.0",
+  "revision_date": "2026-05-09",
+  "notes": "Summary of planned vendor targets on representative operators. Authoritative per-op list: musa_aiter.registry OperatorCapability.vendor_backends and `musa-aiter list-ops --json`.",
+  "operators": {
+    "add": ["handwritten-mu", "mcc-jit"],
+    "multiply": ["handwritten-mu", "mcc-jit"],
+    "reduce_sum": ["handwritten-mu", "mcc-jit"],
+    "softmax_last_dim": ["handwritten-mu", "mcc-jit", "mutlass"],
+    "rmsnorm": ["mudnn", "handwritten-mu", "mcc-jit"],
+    "flash_attn_func": ["mudnn", "mubin", "mutlass"],
+    "paged_attention_v1": ["mudnn", "mubin"],
+    "gemm": ["mudnn", "mutlass", "mubin"],
+    "grouped_gemm": ["mudnn", "mutlass", "mubin"],
+    "fused_moe": ["mudnn", "mutlass", "mubin"],
+    "kv_paged_to_linear": ["handwritten-mu", "mubin", "mudnn"],
+    "kv_linear_to_paged": ["handwritten-mu", "mubin", "mudnn"],
+    "kv_paged_to_linear_multi_layer": ["handwritten-mu", "mubin", "mudnn"],
+    "kv_linear_to_paged_multi_layer": ["handwritten-mu", "mubin", "mudnn"]
+  }
+}

@@ -1,0 +1,5 @@
+op,arch,dtype,shape,backend,kernel,latency_us
+gemm,mp31,float16,"m=256,n=256,k=256",torch-reference,ref_matmul,
+rmsnorm,mp31,float16,"batch=8,hidden=128",torch-reference,ref_rmsnorm,
+grouped_gemm,mp31,float16,"tokens=512,hidden=128,out=256,groups=4",torch-reference,ref_grouped_gemm_preset,
+fused_moe,mp31,float16,"tokens=128,hidden=64,inter=128,experts=4,topk=2",torch-reference,ref_fused_moe_preset,

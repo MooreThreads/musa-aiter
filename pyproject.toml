@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "musa-aiter"
+description = "MUSA AITER: AI Tensor Engine for MUSA"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE", "ThirdPartyNotices.txt"]
+authors = [{ name = "MUSA AITER Contributors", email = "lei.xiao@mthreads.com" }]
+keywords = ["musa", "ai", "tensor", "llm", "gpu", "operators"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dynamic = ["version"]
+dependencies = []
+
+[project.optional-dependencies]
+cpu = ["torch>=2.0"]
+dev = ["pytest>=7", "build"]
+docs = ["mkdocs>=1.6,<2", "mkdocs-material>=9.5", "pymdown-extensions>=10"]
+vllm-reference = ["vllm>=0.20,<0.21"]  # NVIDIA/CUDA reference only — production MUSA inference uses https://github.com/MooreThreads/vllm-musa
+
+[project.scripts]
+musa-aiter = "musa_aiter.cli.main:main"
+
+[tool.setuptools]
+packages = { find = { where = ["."], include = ["musa_aiter*"] } }
+include-package-data = true
+
+[tool.setuptools.data-files]
+"csrc/attention" = ["csrc/attention/*.mu"]
+"csrc/common" = ["csrc/common/*.h"]
+"csrc/ipc" = ["csrc/ipc/*.cpp"]
+"csrc/kvcache" = ["csrc/kvcache/*.cpp", "csrc/kvcache/*.mu"]
+"csrc/norm" = ["csrc/norm/*.mu"]
+"csrc/reduction" = ["csrc/reduction/*.mu"]
+"csrc/smoke" = ["csrc/smoke/*.mu"]
+"configs/backends" = ["configs/backends/*.json"]
+"configs/model_configs" = ["configs/model_configs/*.json"]
+"configs/model_zoo" = ["configs/model_zoo/*"]
+"configs/tuned" = ["configs/tuned/*.csv"]
+
+[tool.setuptools.dynamic]
+version = { attr = "musa_aiter.version.__version__" }
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+markers = [
+  "musa: tests that require TorchMUSA and a MUSA device (skipped in CPU CI)",
+  "native: optional native ctypes / JIT execution paths (may need env vars and mcc)",
+  "slow: comparatively slow subprocess or large-shape tests",
+]
+testpaths = ["op_tests"]

@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.egg-info/
+.eggs/
+build/
+dist/
+site/
+.venv/
+venv/
+.env
+.env.*
+
+# Test / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+
+# Native build artifacts
+*.o
+*.a
+*.dylib
+*.dll
+*.mubin
+*.hsaco
+*.cubin
+*.ptx
+*.fatbin
+*.log
+compile_commands.json
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+
+# MUSA AITER generated outputs
+.cache/
+aot-ops/
+kernels-cache/
+musa_aiter_dumps/
+bench_results/
+tuning_results/
+configs/generated/
+docs/benchmarks/dashboard.md
+docs/benchmarks/latest.json
+
+# Local AOT/JIT plans and generated packages
+build/aot-plan/
+build/aot-package/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Large generated profiling files
+*.nsys-rep
+*.qdrep
+*.sqlite
+*.jsonl
+AGENT.lab.local.md
+
+# Moore Threads MUSA SDK — offline crawl + generated PDF bundles (large; regenerated locally)
+docs/musa-sdk-doc-offline/
+docs/pdf/*.pdf
+
+# Codex-local generated decks, inventories, and superseded planning drafts
+.codex-local/
