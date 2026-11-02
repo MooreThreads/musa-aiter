@@ -90,4 +90,5 @@ Trace records identify the operation, selected backend, device, dtype, and fallb
 | Adapter decision says unavailable | An opt-in switch or layout/device precondition is missing | Inspect the decision reason and use the reference path until the precondition is met. |
 | Numerical mismatch after replacement | Framework metadata or dtype/layout conversion differs | Disable replacement, compare the converted tensors and scales, then re-enable one route at a time. |
 
-For a runnable coexistence check and optional engine smoke, see [`examples/verify_sglang_musa_aiter.py`](../examples/verify_sglang_musa_aiter.py).
+For a runnable coexistence check and optional engine smoke, see
+[`examples/verify_sglang_musa_aiter.py`](https://github.com/MooreThreads/musa-aiter/blob/main/examples/verify_sglang_musa_aiter.py).
